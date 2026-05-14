@@ -1,5 +1,5 @@
 float gravity = 2;
-float tInc = 0.04;
+float tInc = 0.2;
  
 class Particle extends renderer {
   //Atributes
@@ -12,14 +12,14 @@ class Particle extends renderer {
   //Constructor
   Particle(PVector _initialPos) {
     col = color (255, 100, 100);
-    size = new PVector(20, 20, 20);
+    size = new PVector((((width + height) / 2) / (rows + cols) / 2), 10, 10);
     pMass = 1;
     pos = _initialPos;
     isStatic = false;
   }
    Particle(PVector _initialPos, boolean _isStatic) {
     col = color (255, 100, 100);
-    size = new PVector(20, 20, 20);
+    size = new PVector(((width + height) / 2 / (rows + cols) / 2), 10, 10);
     pMass = 1;
     pos = _initialPos;
     isStatic = _isStatic;
@@ -37,7 +37,6 @@ class Particle extends renderer {
     
     if(isStatic) return;
 
-    
     //Gravity
     pForce.y += gravity;
 
@@ -65,7 +64,7 @@ class Particle extends renderer {
   void Draw() {
     push();
     noStroke();
-    translate(pos.x, pos.y, pos.z);
+    translate(pos.x - width / 2, pos.y - height / 2, pos.z);
     fill(col);
     sphere(size.x);
     pop();

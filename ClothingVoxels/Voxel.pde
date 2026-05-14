@@ -19,7 +19,7 @@ class voxel extends renderer {
     push();
     noFill();
     stroke(col);
-    translate(pos.x, pos.y, pos.z);
+    translate(pos.x - width / 2, pos.y - height / 2, pos.z);
     box(size.x, size.y, size.z);
     pop();
   }
