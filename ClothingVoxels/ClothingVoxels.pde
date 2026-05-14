@@ -7,6 +7,7 @@ Particle[][] cloth;
 ArrayList<Spring> springs = new ArrayList<Spring>();
 
 float particleXDist, particleYDist;
+float camZ = width / 2;
 
 //Voxel
 voxel v;
@@ -41,7 +42,7 @@ void setup() {
 
   float dureza = 0.8;
   float restLength;
-  
+
   if (particleXDist > particleYDist) restLength = particleYDist;
   else restLength = particleXDist;
 
@@ -64,27 +65,29 @@ void setup() {
 void draw() {
   background(255);
 
-  translate(width/2, height/2, -width / 2);
+  translate(width/2, height/2, -camZ);
   rotateX(angleX);
   rotateY(angleY);
-  
+
   for (int i = 0; i < cols; i++) {
     for (int j = 0; j < rows; j++) {
       cloth[i][j].ResetForces();
     }
   }
-  
+
   for (Spring s : springs) {
     s.ApplySpringAB();
     s.ApplySpringBA();
     s.Draw();
-  }
-  
-  if(v.pos.x <= 0) speed = 20;
-  else if(v.pos.x >= width) speed = -speed;
-  
-  v.pos.x = v.pos.x + speed * tInc;
-  
+  } //<>//
+
+  /*if(v.pos.x <= 0) speed = 20;
+   else if(v.pos.x >= width) speed = -speed;
+   
+   v.pos.x = v.pos.x + speed * tInc;*/
+
+  v.pos.x = mouseX;
+  v.pos.y = mouseY;
   //Draw the Voxel
   v.Draw();
 
@@ -94,7 +97,9 @@ void draw() {
         cloth[i][j].pForce.x += v.property_voxel.x;
         cloth[i][j].pForce.y += v.property_voxel.y;
         cloth[i][j].pForce.z += v.property_voxel.z;
-      }
+        cloth[i][j].col = color(0, 0, 255);
+      } else cloth[i][j].col = color(255, 0, 0);
+
       cloth[i][j].ParticleMove();
       cloth[i][j].Draw();
     }
@@ -114,4 +119,11 @@ void MoveCamera() {
 void keyReleased()
 {
   keyCode = 0;
+}
+
+void mouseWheel(MouseEvent event) {
+  float e = event.getCount();
+  if (e < 0) camZ -= 5;
+  if (e > 0) camZ += 5;
+  println(e);
 }

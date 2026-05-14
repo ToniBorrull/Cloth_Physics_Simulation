@@ -37,7 +37,6 @@ class Particle extends renderer {
     
     if(isStatic) return;
 
-    
     //Gravity
     pForce.y += gravity;
 
