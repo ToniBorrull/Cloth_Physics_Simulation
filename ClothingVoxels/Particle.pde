@@ -33,21 +33,26 @@ class Particle extends renderer {
     //Gravity
     pForce.x += 0;
     pForce.y += gravity;
+    pForce.z += 0;
 
     //Damping
     pForce.x += KD * pVelocity.x;
     pForce.y += KD * pVelocity.y;
+    pForce.z += KD * pVelocity.y;
 
     pAcceleration.x = pForce.x/pMass;
     pAcceleration.y = pForce.y/pMass;
+    pAcceleration.z = pForce.z/pMass;
     
     //Velocity via acceleration
     pVelocity.x = pVelocity.x + tInc * pAcceleration.x;
     pVelocity.y = pVelocity.y + tInc * pAcceleration.y;
+    pVelocity.y = pVelocity.z + tInc * pAcceleration.z;
 
     //Position via velocity
     pos.x = pos.x + tInc * pVelocity.x;
     pos.y = pos.y + tInc * pVelocity.y;
+    pos.z = pos.z + tInc * pVelocity.z;
   }
 
 @Override

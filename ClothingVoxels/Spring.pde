@@ -1,11 +1,11 @@
 class Spring extends renderer {
-  PVector p1, p2;
+  Particle p1, p2;
 
   float KS; // Strength constant
   float restLenght; // rest lenght of each spring
   float maxDisplacement; // rest lenght of each spring
 
-  Spring(PVector _p1, PVector _p2, float _KS, float _rl, float _maxDisplacement) {
+  Spring(Particle _p1, Particle _p2, float _KS, float _rl, float _maxDisplacement) {
     p1 = _p1;
     p2 = _p2;
 
@@ -15,8 +15,8 @@ class Spring extends renderer {
   }
 
   // B pulls A
-  PVector ApplySpringBA() {
-    PVector vector = new PVector(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
+  void ApplySpringBA() {
+    PVector vector = new PVector(p1.pos.x - p2.pos.x, p1.pos.y - p2.pos.y, p1.pos.z - p2.pos.z);
     float module = moduleVector(vector);
     PVector forceVector = new PVector();
 
@@ -34,12 +34,14 @@ class Spring extends renderer {
       forceVector = new PVector(vector.x * force, vector.y * force, vector.z * force);
     }
 
-    return forceVector;
+    p1.pForce.x += forceVector.x;
+    p1.pForce.y += forceVector.x;
+    p1.pForce.z += forceVector.x;
   }
 
   // A pulls B
-  PVector ApplySpringAB() {
-    PVector vector = new PVector(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
+  void ApplySpringAB() {
+    PVector vector = new PVector(p2.pos.x - p1.pos.x, p2.pos.y - p1.pos.y, p2.pos.z - p1.pos.z);
     float module = moduleVector(vector);
     PVector forceVector = new PVector();
 
@@ -56,12 +58,14 @@ class Spring extends renderer {
       forceVector = new PVector(vector.x * force, vector.y * force, vector.z * force);
     }
 
-    return forceVector;
+    p2.pForce.x -= forceVector.x;
+    p2.pForce.y -= forceVector.x;
+    p2.pForce.z -= forceVector.x;
   }
 
-@Override
-  void Draw() {
+  @Override
+    void Draw() {
     stroke(col);
-    line(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
+    line(p1.pos.x, p1.pos.y, p1.pos.z, p2.pos.x, p2.pos.y, p2.pos.z);
   }
 }
