@@ -1,64 +1,66 @@
 class Spring {
-  PVector p1 ,p2; 
-  
+  PVector p1, p2;
+
   float KS; // Strength constant
   float restLenght; // rest lenght of each spring
+  float maxDisplacement; // rest lenght of each spring
 
-  Spring(PVector _p1, PVector _p2, float _KS, float _rl) {
+  Spring(PVector _p1, PVector _p2, float _KS, float _rl, float _maxDisplacement) {
     p1 = _p1;
     p2 = _p2;
-    
+
     KS = _KS;
     restLenght = _rl;
+    maxDisplacement = _maxDisplacement;
   }
 
- // B pulls A
-  void ApplySpring(PVector posA, TailParticle pB) {
-    PVector dir = new PVector(posA.x - pB.tPosition.x, posA.y - pB.tPosition.y, posA.z - pB.tPosition.z);
-    float d = moduleVector(dir);
+  // B pulls A
+  PVector ApplySpringBA() {
+    PVector vector = new PVector(p1.x - p2.x, p1.y - p2.y, p1.z - p2.z);
+    float module = moduleVector(vector);
+    PVector forceVector = new PVector();
 
-    if (d > 0) {
-      normalizeVector(dir);
-      float displacement = d - rest_length;
-      
+    if (module > 0) {
+      normalizeVector(vector);
+
+      float displacement = module - restLength;
+
       //Limit the total displacement
-      float maxDisplacement = 15.0;
-      if(displacement > maxDisplacement) displacement = maxDisplacement;
-      if(displacement < -maxDisplacement) displacement = -maxDisplacement;
-      
+      if (displacement > maxDisplacement) displacement = maxDisplacement;
+      if (displacement < -maxDisplacement) displacement = -maxDisplacement;
+
       float force = KS * displacement;
 
-      pB.tForce.x += dir.x * force;
-      pB.tForce.y += dir.y * force;
-      pB.tForce.z += dir.z * force;
+      forceVector = new PVector(vector.x * force, vector.y * force, vector.z * force);
     }
+
+    return forceVector;
   }
 
   // A pulls B
-  void ApplySpringBackwards(TailParticle pA, TailParticle pB) {
-    PVector dir = new PVector(pB.tPosition.x - pA.tPosition.x, pB.tPosition.y - pA.tPosition.y, pB.tPosition.z - pA.tPosition.z);
-    float d = moduleVector(dir);
+  PVector ApplySpringAB() {
+    PVector vector = new PVector(p2.x - p1.x, p2.y - p1.y, p2.z - p1.z);
+    float module = moduleVector(vector);
+    PVector forceVector = new PVector();
 
-    if (d > 0) {
-      normalizeVector(dir);
-      float displacement = d - rest_length;
-      
+    if (module > 0) {
+      normalizeVector(vector);
+      float displacement = module - restLength;
+
       //Limit the total displacement
-      //Less than the previous because the head only pulls backwards and separates a lot more
-      float maxDisplacement = 6;
-      if(displacement > maxDisplacement) displacement = maxDisplacement;
-      if(displacement < -maxDisplacement) displacement = -maxDisplacement;
-      
-      
-      float force = KS * displacement;
+      if (displacement > maxDisplacement) displacement = maxDisplacement;
+      if (displacement < -maxDisplacement) displacement = -maxDisplacement;
 
-      pA.tForce.x += dir.x * force;
-      pA.tForce.y += dir.y * force;
-      pA.tForce.z += dir.z * force;
+
+      float force = KS * displacement;
+      forceVector = new PVector(vector.x * force, vector.y * force, vector.z * force);
     }
+
+    return forceVector;
   }
-  
+
   void DrawString() {
-     
+    stroke(col);
+    line(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
   }
 }
