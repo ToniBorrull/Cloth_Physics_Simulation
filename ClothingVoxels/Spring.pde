@@ -1,50 +1,15 @@
-//Eel class that uses the Tail Particle
-/*class Eel extends Fish {
-  //Number of total particles
-  int numNodes = 4; 
-  ArrayList<TailParticle> tail = new ArrayList<TailParticle>();
+class Spring {
+  PVector p1 ,p2; 
   
-  //Spring vars
-  float KS = 0.5; // Strength constant
-  float rest_length = 25.0; // rest lenght of each spring
+  float KS; // Strength constant
+  float restLenght; // rest lenght of each spring
 
-  Eel(color _pColor, float _pSize, float _pMass, PVector _initialPos, PVector _initialVelocity) {
-    super(_pColor, _pSize, _pMass, _initialPos, _initialVelocity);
-
-    // Tail
-    for (int i = 0; i < numNodes; i++) {
-      PVector startPos = new PVector(_initialPos.x - (i + 1) * rest_length, _initialPos.y, _initialPos.z);
-      tail.add(new TailParticle(startPos, _pMass * 0.5, _pSize * 0.6));
-    }
+  Spring(PVector _p1, PVector _p2, float _KS, float _rl) {
+    p1 = _p1;
+    p2 = _p2;
     
-    model = eelModel;
-  }
-
-  @Override
-  void ParticleMove() {
-    super.ParticleMove();
-
-    //Tail forces are 0 (no intentions)
-    for (int i = 0; i < numNodes; i++) {
-      tail.get(i).tForce.x = 0;
-      tail.get(i).tForce.y = 0;
-      tail.get(i).tForce.z = 0;
-   }
-
-    //Hooke's law
-    //Force from the head to the first part
-    ApplySpring(this.pPosition, tail.get(0));
-
-    // tail particles
-    for (int i = 0; i < numNodes - 1; i++) {
-      ApplySpring(tail.get(i).tPosition, tail.get(i+1));
-      ApplySpringBackwards(tail.get(i), tail.get(i+1));
-    }
-
-    // Tail movement
-    for (int i = 0; i < numNodes; i++) {
-      tail.get(i).UpdatePhysics();
-    }
+    KS = _KS;
+    restLenght = _rl;
   }
 
  // B pulls A
@@ -92,25 +57,8 @@
       pA.tForce.z += dir.z * force;
     }
   }
-
-  @Override
-  void ParticleDraw() {
-    if (destroyed) return;
-      //Draw head
-    super.ParticleDraw(); 
-
-    // Draw tial
-    for (int i = 0; i < numNodes; i++) {
-      tail.get(i).DrawParticle();
-    }
-
-    // Debug purposes (tail)
-    
-    strokeWeight(2);
-    stroke(255, 100);
-    line(pPosition.x, pPosition.y, pPosition.z, tail.get(0).tPosition.x, tail.get(0).tPosition.y, tail.get(0).tPosition.z);
-    for (int i = 0; i < numNodes - 1; i++) {
-      line(tail.get(i).tPosition.x, tail.get(i).tPosition.y, tail.get(i).tPosition.z, tail.get(i+1).tPosition.x, tail.get(i+1).tPosition.y, tail.get(i+1).tPosition.z);
-    }
+  
+  void DrawString() {
+     
   }
-}*/
+}
