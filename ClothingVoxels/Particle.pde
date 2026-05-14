@@ -50,8 +50,10 @@ class Particle extends renderer {
     pos.y = pos.y + tInc * pVelocity.y;
   }
 
+@Override
   void Draw() {
     push();
+    noStroke();
     translate(pos.x, pos.y, pos.z);
     fill(col);
     sphere(size.x);

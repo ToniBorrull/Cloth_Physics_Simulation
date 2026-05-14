@@ -14,7 +14,8 @@ class voxel extends renderer {
     col = c;
   }
 
-  void render_voxel() {
+@Override
+  void Draw() {
     push();
     noFill();
     stroke(col);
