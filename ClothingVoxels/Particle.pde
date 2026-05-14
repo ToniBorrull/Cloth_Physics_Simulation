@@ -1,5 +1,6 @@
 float gravity = 2;
-
+float tInc = 0.04;
+ 
 class Particle extends renderer {
   //Atributes
   float pMass;
@@ -31,7 +32,7 @@ class Particle extends renderer {
   }
   //Methods
   void ParticleMove() {
-    float tInc = 0.04;
+   
     float KD = -0.3; //Damping const (negative)
     
     if(isStatic) return;
