@@ -1,4 +1,4 @@
-//Voxels + Cloth
+//Voxels + Cloth //<>//
 
 //Particles Varibles
 int cols;
@@ -12,7 +12,7 @@ PVector[] screenPoints;
 int draggedPoint = -1; //-1 if nothing is being dragged
 
 float particleXDist, particleYDist;
-float camZ = width / 2;
+float camZ = width;
 
 //Voxel
 voxel v;
@@ -22,7 +22,7 @@ float angleX = 0, angleY = 0;
 float speed = 20;
 
 void setup() {
-  size(500, 500, P3D);
+  size(1900, 1080, P3D);
   //int posX, int posY, int posZ, float dx, float dy, float dz, float px, float py, float pz, color c
   v = new voxel(width/2, 550, 0, 200, 100, 200, 0, -100, 0, color(200));
 
@@ -92,12 +92,6 @@ void draw() {
     s.Draw();
   }
 
-  if (v.pos.x <= 0) {
-    speed = 20;
-  } else if (v.pos.x >= width) {
-    speed = -speed;
-  }
-  v.pos.x = v.pos.x + speed * tInc;
   //Draw the Voxel
   v.Draw();
 
@@ -126,6 +120,8 @@ void draw() {
   }
 
   MoveCamera();
+  if (prevKey != 0) v.MoveVoxel();
+  else prevKey = key;
 }
 
 void MoveCamera() {
@@ -138,15 +134,15 @@ void MoveCamera() {
 
 void keyReleased()
 {
+  prevKey = 0;
   keyCode = 0;
+  key = 0;
 }
 
 void mousePressed()
 {
-
   //reset the draggedPoint
   draggedPoint = -1;
-
 
   //If the mouse is in-bounds of the screenPoint, mark it as the actual control point to move
   for (int i = 0; i < allPoints; i++) {
@@ -160,7 +156,6 @@ void mousePressed()
 void mouseDragged() {
   //If there is a point selected
   if (draggedPoint != -1) {
-
     int i = draggedPoint % cols;
     int j = draggedPoint / cols;
 
@@ -168,6 +163,11 @@ void mouseDragged() {
     cloth[i][j].pos.x += (mouseX - pmouseX);
     cloth[i][j].pos.y += (mouseY - pmouseY);
   }
+}
+
+void mouseReleased()
+{
+   draggedPoint = -1;
 }
 
 void mouseWheel(MouseEvent event) {
