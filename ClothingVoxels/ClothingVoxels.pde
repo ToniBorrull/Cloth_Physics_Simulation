@@ -25,7 +25,6 @@ void setup() {
   //Generate the particles
   for (int i = 0; i < cols; i++) {
     for (int j = 0; j < rows; j++) {
-      // CORRECCIÓN 1: Condición lógica arreglada (usando || y verificando i)
       if (j == 0){// && (i == 0 || i == cols - 1)) {
         cloth[i][j] = new Particle(new PVector(i * 40, j * 40 + 100, -400), true);
       } else {
@@ -42,12 +41,12 @@ void setup() {
     for (int j = 0; j < rows; j++) {
       if (i < cols - 1) {
         //PVector _p1, PVector _p2, float _KS, float _rl, float _maxDisplacement
-        springs.add(new Spring(cloth[i][j], cloth[i + 1][j], dureza, restLength, 2000));
+        springs.add(new Spring(cloth[i][j], cloth[i + 1][j], dureza, restLength, 20));
       }
 
       if (j < rows - 1) {
         //PVector _p1, PVector _p2, float _KS, float _rl, float _maxDisplacement
-        springs.add(new Spring(cloth[i][j], cloth[i][j + 1], dureza, restLength, 2000));
+        springs.add(new Spring(cloth[i][j], cloth[i][j + 1], dureza, restLength, 20));
       }
     }
   }
@@ -79,11 +78,11 @@ void draw() {
   
    for (int i = 0; i <cols; i++) {
     for (int j = 0; j < rows; j++) {
-      if(isInside(cloth[i][j], v)){
+      /*if(isInside(cloth[i][j], v)){
         cloth[i][j].pForce.x += v.property_voxel.x;
         cloth[i][j].pForce.y += v.property_voxel.y;
         cloth[i][j].pForce.z += v.property_voxel.z;
-      }
+      }*/
       cloth[i][j].ParticleMove();
       cloth[i][j].Draw();
     }
