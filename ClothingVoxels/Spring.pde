@@ -1,4 +1,4 @@
-class Spring {
+class Spring extends renderer {
   PVector p1, p2;
 
   float KS; // Strength constant
@@ -23,7 +23,7 @@ class Spring {
     if (module > 0) {
       normalizeVector(vector);
 
-      float displacement = module - restLength;
+      float displacement = module - restLenght;
 
       //Limit the total displacement
       if (displacement > maxDisplacement) displacement = maxDisplacement;
@@ -45,7 +45,7 @@ class Spring {
 
     if (module > 0) {
       normalizeVector(vector);
-      float displacement = module - restLength;
+      float displacement = module - restLenght;
 
       //Limit the total displacement
       if (displacement > maxDisplacement) displacement = maxDisplacement;
@@ -59,7 +59,8 @@ class Spring {
     return forceVector;
   }
 
-  void DrawString() {
+@Override
+  void Draw() {
     stroke(col);
     line(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
   }

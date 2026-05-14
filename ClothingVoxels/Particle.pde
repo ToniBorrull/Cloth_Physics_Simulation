@@ -48,7 +48,6 @@ class Particle extends renderer {
     pos.y = pos.y + tInc * pVelocity.y;
   }
 
-@Override
   void Draw() {
     push();
     translate(pos.x, pos.y, pos.z);
