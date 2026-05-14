@@ -1,24 +1,25 @@
-class voxel{
-  PVector pos_voxel = new PVector(0,0); //Voxel position in 2D
-  PVector dim_voxel= new PVector(0,0); //Voxel dimensions
-  PVector property_voxel = new PVector(0,0); //The vector stored in the voxel
-  color color_voxel;
-  
-  voxel(int posX, int posY, float dx, float dy, float px, float py, color c){
-    pos_voxel.x = posX;
-    pos_voxel.y = posY;
-    dim_voxel.x = dx;
-    dim_voxel.y = dy;
+class voxel extends renderer {
+  PVector property_voxel = new PVector(0, 0); //The vector stored in the voxel
+
+  voxel(int posX, int posY, int posZ, float dx, float dy, float dz, float px, float py, float pz, color c) {
+    pos.x = posX;
+    pos.y = posY;
+    pos.z = posZ;
+    size.x = dx;
+    size.y = dy;
+    size.z = dz;
     property_voxel.x = px;
     property_voxel.y = py;
-    color_voxel = c;
-}
+    property_voxel.z = pz;
+    col = c;
+  }
 
-void render_voxel(){
-  noFill();
-  stroke(color_voxel);
-  rectMode(CENTER);
-  rect((float)pos_voxel.x, (float)pos_voxel.y, dim_voxel.x, dim_voxel.y);
-  box(pos_voxel.x, pos_voxel.y, dim_voxel.x, dim_voxel.y, dim_voxel.z);
-}
+  void render_voxel() {
+    push();
+    noFill();
+    stroke(col);
+    translate(pos.x, pos.y, pos.z);
+    box(size.x, size.y, size.z);
+    pop();
+  }
 }

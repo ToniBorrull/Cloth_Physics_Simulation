@@ -1,5 +1,5 @@
 //Eel class that uses the Tail Particle
-class Eel extends Fish {
+/*class Eel extends Fish {
   //Number of total particles
   int numNodes = 4; 
   ArrayList<TailParticle> tail = new ArrayList<TailParticle>();
@@ -113,4 +113,4 @@ class Eel extends Fish {
       line(tail.get(i).tPosition.x, tail.get(i).tPosition.y, tail.get(i).tPosition.z, tail.get(i+1).tPosition.x, tail.get(i+1).tPosition.y, tail.get(i+1).tPosition.z);
     }
   }
-}
+}*/

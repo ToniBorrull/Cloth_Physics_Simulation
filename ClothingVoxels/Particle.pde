@@ -30,9 +30,6 @@ class Particle {
     
     if(isStatic) return;
     
-    //Acceleration via forces
-    //All forces should be here
-    
     //Gravity
     pForce.x += 0;
     pForce.y += 9.81;
