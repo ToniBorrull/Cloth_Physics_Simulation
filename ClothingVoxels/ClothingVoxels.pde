@@ -6,6 +6,11 @@ int rows;
 Particle[][] cloth;
 ArrayList<Spring> springs = new ArrayList<Spring>();
 
+int allPoints = cols * rows;
+
+PVector[] screenPoints;
+int draggedPoint = -1; //-1 if nothing is being dragged
+
 //Voxel
 voxel v;
 
@@ -19,8 +24,14 @@ void setup() {
 
   cols = 10;
   rows = 10;
+  allPoints = cols * rows;
 
   cloth = new Particle[cols][rows];
+
+  screenPoints = new PVector[allPoints];
+  for (int i = 0; i < screenPoints.length; i++) {
+    screenPoints[i] = new PVector(0, 0);
+  }
 
   //Generate the particles
   for (int i = 0; i < cols; i++) {
@@ -65,17 +76,18 @@ void draw() {
   rotateX(angleX);
   rotateY(angleY);
   translate(-width/2, -height/4, 0);
-  
+
   for (Spring s : springs) {
     s.ApplySpringAB();
     s.ApplySpringBA();
     s.Draw();
   }
-  
-  if(v.pos.x <= 0){
+
+  if (v.pos.x <= 0) {
     speed = 20;
-  }else if(v.pos.x >= width){
-    speed = -speed;}
+  } else if (v.pos.x >= width) {
+    speed = -speed;
+  }
   v.pos.x = v.pos.x + speed * tInc;
   //Draw the Voxel
   v.Draw();
@@ -89,6 +101,16 @@ void draw() {
       }
       cloth[i][j].ParticleMove();
       cloth[i][j].Draw();
+    }
+  }
+
+  for (int i = 0; i < cols; i++) {
+    for (int j = 0; j < rows; j++) {
+      PVector p = cloth[i][j].pos;
+
+      int index = i + j * cols;
+      screenPoints[index].x = screenX(p.x, p.y, p.z);
+      screenPoints[index].y = screenY(p.x, p.y, p.z);
     }
   }
 
@@ -106,4 +128,33 @@ void MoveCamera() {
 void keyReleased()
 {
   keyCode = 0;
+}
+
+void mousePressed()
+{
+
+  //reset the draggedPoint
+  draggedPoint = -1;
+
+
+  //If the mouse is in-bounds of the screenPoint, mark it as the actual control point to move
+  for (int i = 0; i < allPoints; i++) {
+    if (dist(mouseX, mouseY, screenPoints[i].x, screenPoints[i].y) < 20) {
+      draggedPoint = i;
+      break;
+    }
+  }
+}
+
+void mouseDragged() {
+  //If there is a point selected
+  if (draggedPoint != -1) {
+
+    int i = draggedPoint % cols;
+    int j = draggedPoint / cols;
+
+    //Move it x and z based on the mouse pos
+    cloth[i][j].pos.x += (mouseX - pmouseX);
+    cloth[i][j].pos.y += (mouseY - pmouseY);
+  }
 }
