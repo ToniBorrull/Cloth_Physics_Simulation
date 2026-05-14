@@ -8,6 +8,9 @@ Particle p;
 //Voxel
 voxel v;
 
+
+float angleX = 0, angleY = 0;
+
 void setup() {
   size(500, 500, P3D);
   //int posX, int posY, int posZ, float dx, float dy, float dz, float px, float py, float pz, color c
@@ -28,11 +31,31 @@ void setup() {
 
 void draw() {
   background(255);
-  v.Draw();
+  v.render_voxel();
+
+  translate(width/2, height/2, -100);
+  rotateX(angleX);
+  rotateY(angleY);
+
   for (int i = 0; i < h; i++) {
     for (int j = 0; j < w; j++) {
         cloth[i][j].ParticleMove();
         cloth[i][j].Draw();
     }
   }
+  
+  MoveCamera();
+}
+
+void MoveCamera() {
+  println(angleY);
+  if (keyCode == UP) angleY += radians(1);
+  if (keyCode == DOWN) angleY -= radians(1);
+  if (keyCode == RIGHT) angleX += radians(1);
+  if (keyCode == LEFT) angleX -= radians(1);
+}
+
+void keyReleased()
+{
+  keyCode = 0; 
 }
