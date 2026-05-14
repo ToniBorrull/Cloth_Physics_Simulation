@@ -1,3 +1,5 @@
+float gravity = 9.81;
+
 class Particle extends renderer {
   //Atributes
   float pMass;
@@ -30,7 +32,7 @@ class Particle extends renderer {
     
     //Gravity
     pForce.x += 0;
-    pForce.y += 9.81;
+    pForce.y += gravity;
 
     //Damping
     pForce.x += KD * pVelocity.x;
