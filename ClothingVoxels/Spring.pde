@@ -4,28 +4,23 @@ class Spring extends renderer {
   float restLenght; // rest lenght of each spring
   float maxDisplacement; // rest lenght of each spring
 
-  Spring(Particle _p1, Particle _p2, float _KS, float _rl, float _maxDisplacement) {
+  Spring(Particle _p1, Particle _p2, float _KS, float _rl) {
     p1 = _p1;
     p2 = _p2;
     KS = _KS;
     restLenght = _rl;
-    maxDisplacement = _maxDisplacement;
   }
 
   // B pulls A
   void ApplySpringBA() {
     PVector vector = new PVector(p1.pos.x - p2.pos.x, p1.pos.y - p2.pos.y, p1.pos.z - p2.pos.z);
-    float module = moduleVector(vector);
+    float vectorModule = moduleVector(vector);
     PVector forceVector = new PVector();
 
-    if (module > 0) {
+    if (vectorModule > 0) {
       normalizeVector(vector);
 
-      float displacement = module - restLenght;
-
-      //Limit the total displacement
-      if (displacement > maxDisplacement) displacement = maxDisplacement;
-      if (displacement < -maxDisplacement) displacement = -maxDisplacement;
+      float displacement = vectorModule - restLenght;
 
       float force = KS * displacement;
 
@@ -41,17 +36,12 @@ class Spring extends renderer {
   // A pulls B
   void ApplySpringAB() {
     PVector vector = new PVector(p2.pos.x - p1.pos.x, p2.pos.y - p1.pos.y, p2.pos.z - p1.pos.z);
-    float module = moduleVector(vector);
+    float vectorModule = moduleVector(vector);
     PVector forceVector = new PVector();
 
-    if (module > 0) {
+    if (vectorModule > 0) {
       normalizeVector(vector);
-      float displacement = module - restLenght;
-
-      //Limit the total displacement
-      if (displacement > maxDisplacement) displacement = maxDisplacement;
-      if (displacement < -maxDisplacement) displacement = -maxDisplacement;
-
+      float displacement = vectorModule - restLenght;
 
       float force = KS * displacement;
       forceVector = new PVector(vector.x * force, vector.y * force, vector.z * force);
@@ -67,6 +57,6 @@ class Spring extends renderer {
   @Override
     void Draw() {
     stroke(col);
-    line(p1.pos.x, p1.pos.y, p1.pos.z, p2.pos.x, p2.pos.y, p2.pos.z);
+    line(p1.pos.x - width / 2, p1.pos.y - height / 2, p1.pos.z, p2.pos.x - width / 2, p2.pos.y - height / 2, p2.pos.z);
   }
 }
