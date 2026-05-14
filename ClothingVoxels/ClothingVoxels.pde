@@ -1,13 +1,36 @@
 //Voxels + Cloth
 
+//Particles Varibles
+int w, h = 2;
+Particle[][] cloth = new Particle[h][w];
+
+//Voxel
 voxel v;
-void setup(){
+
+void setup() {
   size(500, 500, P3D);
   //int posX, int posY, int posZ, float dx, float dy, float dz, float px, float py, float pz, color c
   v = new voxel(width/2, height/2, 0, 100, 100, 100, -5, 0, 0, color(200));
+
+  //Generate the particles
+  for (int i = 0; i < h; i++) {
+    for (int j = 0; j < w; j++) {
+      if ((i == 0 && j == 0) || (i == 0 && j == (w - 1))) {
+        cloth[i][j] = new Particle(new PVector(100, 100, 100), true);
+      } else {
+        cloth[i][j] = new Particle(new PVector(300, 300, 300));
+      }
+    }
+  }
 }
 
-void draw(){
+void draw() {
   background(255);
   v.render_voxel();
+
+  for (int i = 0; i < h; i++) {
+    for (int j = 0; j < w; j++) {
+        cloth[i][j].Draw();
+    }
+  }
 }

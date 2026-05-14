@@ -1,9 +1,6 @@
-class Particle {
+class Particle extends renderer {
   //Atributes
-  color pColor;
-  float pSize;
   float pMass;
-  PVector pPosition = new PVector(0, 0);
   PVector pVelocity = new PVector(0, 0);
   PVector pAcceleration = new PVector(0, 0);
   boolean isStatic = false;
@@ -11,16 +8,17 @@ class Particle {
   PVector pForce = new PVector(0, 0);
   //Constructor
   Particle(PVector _initialPos) {
-    pColor = color (255, 100, 100);
-    pSize = 20;
+    col = color (255, 100, 100);
+    size = new PVector(20, 20, 20);
     pMass = 1;
-    pPosition = _initialPos;
+    pos = _initialPos;
+    isStatic = false;
   }
    Particle(PVector _initialPos, boolean _isStatic) {
-    pColor = color (255, 100, 100);
-    pSize = 20;
+    col = color (255, 100, 100);
+    size = new PVector(20, 20, 20);
     pMass = 1;
-    pPosition = _initialPos;
+    pos = _initialPos;
     isStatic = _isStatic;
   }
   //Methods
@@ -46,13 +44,16 @@ class Particle {
     pVelocity.y = pVelocity.y + tInc * pAcceleration.y;
 
     //Position via velocity
-    pPosition.x = pPosition.x + tInc * pVelocity.x;
-    pPosition.y = pPosition.y + tInc * pVelocity.y;
+    pos.x = pos.x + tInc * pVelocity.x;
+    pos.y = pos.y + tInc * pVelocity.y;
   }
 
-  void ParticleDraw() {
-    println(pVelocity);
-    fill(pColor);
-    ellipse(pPosition.x, pPosition.y, pSize, pSize);
+@Override
+  void Draw() {
+    push();
+    translate(pos.x, pos.y, pos.z);
+    fill(col);
+    sphere(size.x);
+    pop();
   }
 }

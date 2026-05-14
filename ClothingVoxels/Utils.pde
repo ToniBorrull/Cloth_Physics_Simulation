@@ -1,3 +1,4 @@
+
 PVector normalizeVector(PVector pForce) //3D normalizer
 {
   float magnitude;
