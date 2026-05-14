@@ -1,5 +1,5 @@
 float gravity = 2;
-float tInc = 0.2;
+float tInc = 0.04;
  
 class Particle extends renderer {
   //Atributes

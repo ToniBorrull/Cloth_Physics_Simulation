@@ -6,7 +6,7 @@ int rows;
 Particle[][] cloth;
 ArrayList<Spring> springs = new ArrayList<Spring>();
 
-int allPoints = cols * rows;
+int allPoints;
 
 PVector[] screenPoints;
 int draggedPoint = -1; //-1 if nothing is being dragged
@@ -75,7 +75,7 @@ void setup() {
 
 void draw() {
   background(255);
-
+  push();
   translate(width/2, height/2, -camZ);
   rotateX(angleX);
   rotateY(angleY);
@@ -85,11 +85,6 @@ void draw() {
       cloth[i][j].ResetForces();
     }
   }
-
-  translate(width/2, height/4, 0);
-  rotateX(angleX);
-  rotateY(angleY);
-  translate(-width/2, -height/4, 0);
 
   for (Spring s : springs) {
     s.ApplySpringAB();
@@ -119,14 +114,14 @@ void draw() {
       cloth[i][j].Draw();
     }
   }
-
+  pop();
   for (int i = 0; i < cols; i++) {
     for (int j = 0; j < rows; j++) {
       PVector p = cloth[i][j].pos;
 
       int index = i + j * cols;
-      screenPoints[index].x = screenX(p.x, p.y, p.z);
-      screenPoints[index].y = screenY(p.x, p.y, p.z);
+      screenPoints[index].x = screenX(p.x, p.y, -camZ);
+      screenPoints[index].y = screenY(p.x, p.y, -camZ);
     }
   }
 
