@@ -30,15 +30,17 @@ class Particle extends renderer {
     
     if(isStatic) return;
     
+    pForce.x = 0;
+    pForce.y = 0;
+    pForce.z = 0;
+    
     //Gravity
-    pForce.x += 0;
     pForce.y += gravity;
-    pForce.z += 0;
 
     //Damping
     pForce.x += KD * pVelocity.x;
     pForce.y += KD * pVelocity.y;
-    pForce.z += KD * pVelocity.y;
+    pForce.z += KD * pVelocity.z;
 
     pAcceleration.x = pForce.x/pMass;
     pAcceleration.y = pForce.y/pMass;
@@ -47,7 +49,7 @@ class Particle extends renderer {
     //Velocity via acceleration
     pVelocity.x = pVelocity.x + tInc * pAcceleration.x;
     pVelocity.y = pVelocity.y + tInc * pAcceleration.y;
-    pVelocity.y = pVelocity.z + tInc * pAcceleration.z;
+    pVelocity.z = pVelocity.z + tInc * pAcceleration.z;
 
     //Position via velocity
     pos.x = pos.x + tInc * pVelocity.x;

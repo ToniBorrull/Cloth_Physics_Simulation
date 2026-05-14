@@ -1,8 +1,8 @@
 //Voxels + Cloth
 
 //Particles Varibles
-int cols = 2;
-int rows = 2;
+int cols;
+int rows;
 Particle[][] cloth;
 ArrayList<Spring> springs = new ArrayList<Spring>();
 
@@ -16,29 +16,38 @@ void setup() {
   size(500, 500, P3D);
   //int posX, int posY, int posZ, float dx, float dy, float dz, float px, float py, float pz, color c
   v = new voxel(width/2, height/2, 0, 100, 100, 100, -5, 0, 0, color(200));
+  
+  cols = 10;
+  rows = 10;
+  
   cloth = new Particle[cols][rows];
+  
   //Generate the particles
   for (int i = 0; i < cols; i++) {
     for (int j = 0; j < rows; j++) {
-      if ((i == 0 && j == 0) || (i == 0 && j == (rows - 1))) {
-        cloth[i][j] = new Particle(new PVector(i * 100, 100, -400), true);
+      // CORRECCIÓN 1: Condición lógica arreglada (usando || y verificando i)
+      if (j == 0 && (i == 0 || i == cols - 1)) {
+        cloth[i][j] = new Particle(new PVector(i * 40, j * 40 + 100, -400), true);
       } else {
-        cloth[i][j] = new Particle(new PVector(i * 100, 300, -400));
+        cloth[i][j] = new Particle(new PVector(i * 40, j * 40 + 100, -400));
       }
     }
   }
+  
+  float dureza = 0.8;
+  float restLength = 10;
 
   //Apply String to each particle
   for (int i = 0; i < cols; i++) {
     for (int j = 0; j < rows; j++) {
-      if (i < cols - 2) {
+      if (i < cols - 1) {
         //PVector _p1, PVector _p2, float _KS, float _rl, float _maxDisplacement
-        springs.add(new Spring(cloth[i][j], cloth[i + 1][j], 0.5, 5, 10));
+        springs.add(new Spring(cloth[i][j], cloth[i + 1][j], dureza, restLength, 20));
       }
 
-      if (j < rows - 2) {
+      if (j < rows - 1) {
         //PVector _p1, PVector _p2, float _KS, float _rl, float _maxDisplacement
-        springs.add(new Spring(cloth[i][j], cloth[i][j + 1], 0.5, 5, 10));
+        springs.add(new Spring(cloth[i][j], cloth[i][j + 1], dureza, restLength, 20));
       }
     }
   }
@@ -46,13 +55,17 @@ void setup() {
 
 void draw() {
   background(255);
-  v.Draw();
 
 
-  rotateX(angleX);
-  rotateY(angleY);
+  
 
- 
+  //Draw the Voxel
+   v.Draw();
+   
+   translate(width/2, height/4, 0);
+   rotateX(angleX);
+   rotateY(angleY);
+   translate(-width/2, -height/4, 0);
 
   for (Spring s : springs) {
     s.ApplySpringAB();

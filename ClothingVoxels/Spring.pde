@@ -1,6 +1,5 @@
 class Spring extends renderer {
   Particle p1, p2;
-
   float KS; // Strength constant
   float restLenght; // rest lenght of each spring
   float maxDisplacement; // rest lenght of each spring
@@ -8,7 +7,6 @@ class Spring extends renderer {
   Spring(Particle _p1, Particle _p2, float _KS, float _rl, float _maxDisplacement) {
     p1 = _p1;
     p2 = _p2;
-
     KS = _KS;
     restLenght = _rl;
     maxDisplacement = _maxDisplacement;
@@ -33,11 +31,12 @@ class Spring extends renderer {
 
       forceVector = new PVector(vector.x * force, vector.y * force, vector.z * force);
     }
-
-    p1.pForce.x += forceVector.x;
-    p1.pForce.y += forceVector.x;
-    p1.pForce.z += forceVector.x;
+  if(!p1.isStatic){
+    p1.pForce.x -= forceVector.x;
+    p1.pForce.y -= forceVector.y;
+    p1.pForce.z -= forceVector.z;
   }
+}
 
   // A pulls B
   void ApplySpringAB() {
@@ -58,10 +57,12 @@ class Spring extends renderer {
       forceVector = new PVector(vector.x * force, vector.y * force, vector.z * force);
     }
 
+if(!p2.isStatic){
     p2.pForce.x -= forceVector.x;
-    p2.pForce.y -= forceVector.x;
-    p2.pForce.z -= forceVector.x;
+    p2.pForce.y -= forceVector.y;
+    p2.pForce.z -= forceVector.z;
   }
+}
 
   @Override
     void Draw() {
