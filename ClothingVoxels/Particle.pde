@@ -1,4 +1,4 @@
-float gravity = 9.81;
+float gravity = 2;
 
 class Particle extends renderer {
   //Atributes
@@ -23,16 +23,19 @@ class Particle extends renderer {
     pos = _initialPos;
     isStatic = _isStatic;
   }
+  
+  void ResetForces(){ 
+    pForce.x = 0;
+    pForce.y = 0;
+    pForce.z = 0;
+  }
   //Methods
   void ParticleMove() {
     float tInc = 0.04;
     float KD = -0.3; //Damping const (negative)
     
     if(isStatic) return;
-    
-    pForce.x = 0;
-    pForce.y = 0;
-    pForce.z = 0;
+
     
     //Gravity
     pForce.y += gravity;

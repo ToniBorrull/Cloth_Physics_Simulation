@@ -31,12 +31,12 @@ class Spring extends renderer {
 
       forceVector = new PVector(vector.x * force, vector.y * force, vector.z * force);
     }
-  if(!p1.isStatic){
-    p1.pForce.x -= forceVector.x;
-    p1.pForce.y -= forceVector.y;
-    p1.pForce.z -= forceVector.z;
+    if (!p1.isStatic) {
+      p1.pForce.x -= forceVector.x;
+      p1.pForce.y -= forceVector.y;
+      p1.pForce.z -= forceVector.z;
+    }
   }
-}
 
   // A pulls B
   void ApplySpringAB() {
@@ -57,12 +57,12 @@ class Spring extends renderer {
       forceVector = new PVector(vector.x * force, vector.y * force, vector.z * force);
     }
 
-if(!p2.isStatic){
-    p2.pForce.x -= forceVector.x;
-    p2.pForce.y -= forceVector.y;
-    p2.pForce.z -= forceVector.z;
+    if (!p2.isStatic) {
+      p2.pForce.x -= forceVector.x;
+      p2.pForce.y -= forceVector.y;
+      p2.pForce.z -= forceVector.z;
+    }
   }
-}
 
   @Override
     void Draw() {
