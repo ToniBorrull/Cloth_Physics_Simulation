@@ -1,5 +1,5 @@
 float gravity = 3;
-float tInc = 0.04;
+float tInc = 0.25;
  
 class Particle extends renderer {
   //Atributes
@@ -12,14 +12,14 @@ class Particle extends renderer {
   //Constructor
   Particle(PVector _initialPos) {
     col = color (255, 100, 100);
-    size = new PVector((((width + height) / 2) / (rows + cols) / 2), 10, 10);
+    size = new PVector((((width + height) / 2) / (rows + cols) / 2) / 10, 10, 10);
     pMass = 1;
     pos = _initialPos;
     isStatic = false;
   }
    Particle(PVector _initialPos, boolean _isStatic) {
     col = color (255, 100, 100);
-    size = new PVector(((width + height) / 2 / (rows + cols) / 2), 10, 10);
+    size = new PVector(((width + height) / 2 / (rows + cols) / 2) / 10, 10, 10);
     pMass = 1;
     pos = _initialPos;
     isStatic = _isStatic;

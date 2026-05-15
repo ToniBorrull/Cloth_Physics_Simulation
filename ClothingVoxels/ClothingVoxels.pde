@@ -1,9 +1,10 @@
-//Voxels + Cloth //<>//
+//Voxels + Cloth //<>// //<>//
 
 //Particles Varibles
 int cols;
 int rows;
-Particle[][] cloth;
+int depth;
+Particle[][][] cloth;
 ArrayList<Spring> springs = new ArrayList<Spring>();
 
 int allPoints;
@@ -11,7 +12,7 @@ int allPoints;
 PVector[] screenPoints;
 int draggedPoint = -1; //-1 if nothing is being dragged
 
-float particleXDist, particleYDist;
+float particleXDist, particleYDist, particleZDist;
 float camZ = width;
 
 //Voxel
@@ -25,15 +26,18 @@ void setup() {
   size(500, 500, P3D);
   //int posX, int posY, int posZ, float dx, float dy, float dz, float px, float py, float pz, color c
   v = new voxel(width/2, 550, 0, 200, 100, 200, 0, -100, 50, color(200));
+  frameRate(240);
+  cols = 20;
+  rows = 1;
+  depth = 20;
 
-  cols = 25;
-  rows = 25;
-  allPoints = cols * rows;
+  allPoints = cols * rows * depth;
 
-  particleXDist = 10;
-  particleYDist = 10;
+  particleXDist = width / cols;
+  particleYDist = height / rows;
+  particleZDist = width / depth;
 
-  cloth = new Particle[cols][rows];
+  cloth = new Particle[cols][rows][depth];
 
   screenPoints = new PVector[allPoints];
   for (int i = 0; i < screenPoints.length; i++) {
@@ -43,10 +47,13 @@ void setup() {
   //Generate the particles
   for (int i = 0; i < cols; i++) {
     for (int j = 0; j < rows; j++) {
-      if (j == 0 && (i == 0 || i == cols - 1)) {
-        cloth[i][j] = new Particle(new PVector(i * particleXDist, 0, 0), true);
-      } else {
-        cloth[i][j] = new Particle(new PVector(i * particleXDist, j * particleYDist, 0));
+      for (int k = 0; k < depth; k++) {
+        if (j == 0 && ((i == 0 || i == cols - 1) && (k == 0 || k == depth - 1))) {
+          cloth[i][j][k] = new Particle(new PVector(i * particleXDist, 0, -k * particleZDist), true);
+          println(k);
+        } else {
+          cloth[i][j][k] = new Particle(new PVector(i * particleXDist, j * particleYDist, -k * particleZDist));
+        }
       }
     }
   }
@@ -60,14 +67,21 @@ void setup() {
   //Apply String to each particle
   for (int i = 0; i < cols; i++) {
     for (int j = 0; j < rows; j++) {
-      if (i < cols - 1) {
-        //PVector _p1, PVector _p2, float _KS, float _rl, float _maxDisplacement
-        springs.add(new Spring(cloth[i][j], cloth[i + 1][j], dureza, restLength));
-      }
+      for (int k = 0; k < depth; k++) {
+        if (i < cols - 1) {
+          //PVector _p1, PVector _p2, float _KS, float _rl, float _maxDisplacement
+          springs.add(new Spring(cloth[i][j][k], cloth[i + 1][j][k], dureza, restLength));
+        }
 
-      if (j < rows - 1) {
-        //PVector _p1, PVector _p2, float _KS, float _rl, float _maxDisplacement
-        springs.add(new Spring(cloth[i][j], cloth[i][j + 1], dureza, restLength));
+        if (j < rows - 1) {
+          //PVector _p1, PVector _p2, float _KS, float _rl, float _maxDisplacement
+          springs.add(new Spring(cloth[i][j][k], cloth[i][j + 1][k], dureza, restLength));
+        }
+
+        if (k < depth - 1) {
+          //PVector _p1, PVector _p2, float _KS, float _rl, float _maxDisplacement
+          springs.add(new Spring(cloth[i][j][k], cloth[i][j][k + 1], dureza, restLength));
+        }
       }
     }
   }
@@ -82,7 +96,9 @@ void draw() {
 
   for (int i = 0; i < cols; i++) {
     for (int j = 0; j < rows; j++) {
-      cloth[i][j].ResetForces();
+      for (int k = 0; k < depth; k++) {
+        cloth[i][j][k].ResetForces();
+      }
     }
   }
 
@@ -97,25 +113,29 @@ void draw() {
 
   for (int i = 0; i <cols; i++) {
     for (int j = 0; j < rows; j++) {
-      if (isInside(cloth[i][j], v)) {
-        cloth[i][j].pForce.x += v.property_voxel.x;
-        cloth[i][j].pForce.y += v.property_voxel.y;
-        cloth[i][j].pForce.z += v.property_voxel.z;
-        cloth[i][j].col = color(0, 0, 255);
-      } else cloth[i][j].col = color(255, 0, 0);
+      for (int k = 0; k < depth; k++) {
+        if (isInside(cloth[i][j][k], v)) {
+          cloth[i][j][k].pForce.x += v.property_voxel.x;
+          cloth[i][j][k].pForce.y += v.property_voxel.y;
+          cloth[i][j][k].pForce.z += v.property_voxel.z;
+          cloth[i][j][k].col = color(0, 0, 255);
+        } else cloth[i][j][k].col = color(255, 0, 0);
 
-      cloth[i][j].ParticleMove();
-      cloth[i][j].Draw();
+        cloth[i][j][k].ParticleMove();
+        cloth[i][j][k].Draw();
+      }
     }
   }
   pop();
   for (int i = 0; i < cols; i++) {
     for (int j = 0; j < rows; j++) {
-      PVector p = cloth[i][j].pos;
+      for (int k = 0; k < depth; k++) {
+        PVector p = cloth[i][j][k].pos;
 
-      int index = i + j * cols;
-      screenPoints[index].x = screenX(p.x, p.y, -camZ);
-      screenPoints[index].y = screenY(p.x, p.y, -camZ);
+        int index = i + j * cols;
+        screenPoints[index].x = screenX(p.x, p.y, -camZ);
+        screenPoints[index].y = screenY(p.x, p.y, -camZ);
+      }
     }
   }
 
@@ -124,7 +144,6 @@ void draw() {
 }
 
 void MoveCamera() {
-  println(angleY);
   if (keyCode == UP) angleX -= radians(1);
   if (keyCode == DOWN) angleX += radians(1);
   if (keyCode == RIGHT) angleY -= radians(1);
@@ -149,14 +168,12 @@ void keyReleased()
 
 void mousePressed()
 {
-
-
   //reset the draggedPoint
   draggedPoint = -1;
 
   //If the mouse is in-bounds of the screenPoint, mark it as the actual control point to move
   for (int i = 0; i < allPoints; i++) {
-      
+
     if (dist(mouseX, mouseY, screenX(screenPoints[i].x, screenPoints[i].y, screenPoints[i].z), screenY(screenPoints[i].x, screenPoints[i].y, screenPoints[i].z)) < 20) {
       draggedPoint = i;
       break;
@@ -169,10 +186,11 @@ void mouseDragged() {
   if (draggedPoint != -1) {
     int i = draggedPoint % cols;
     int j = draggedPoint / cols;
+    int k = draggedPoint % cols;
 
     //Move it x and z based on the mouse pos
-    cloth[i][j].pos.x += (mouseX - pmouseX);
-    cloth[i][j].pos.y += (mouseY - pmouseY);
+    cloth[i][j][k].pos.x += (mouseX - pmouseX);
+    cloth[i][j][k].pos.y += (mouseY - pmouseY);
   }
 }
 
