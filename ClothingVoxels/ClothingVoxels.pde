@@ -30,8 +30,8 @@ void setup() {
   rows = 10;
   allPoints = cols * rows;
 
-  particleXDist = width / cols;
-  particleYDist = height / rows;
+  particleXDist = 10;
+  particleYDist = 10;
 
   cloth = new Particle[cols][rows];
 
@@ -120,8 +120,7 @@ void draw() {
   }
 
   MoveCamera();
-  if (prevKey != 0) v.MoveVoxel();
-  else prevKey = key;
+  v.MoveVoxel();
 }
 
 void MoveCamera() {
@@ -132,15 +131,26 @@ void MoveCamera() {
   if (keyCode == LEFT) angleY += radians(1);
 }
 
+void keyPressed() {
+  if (key == 'w' || key == 'W') goesUp = true;
+  if (key == 's' || key == 'S') goesDown = true;
+  if (key == 'a' || key == 'A') goesLeft = true;
+  if (key == 'd' || key == 'D') goesRight = true;
+}
 void keyReleased()
 {
-  prevKey = 0;
+  if (key == 'w' || key == 'W') goesUp = false;
+  if (key == 's' || key == 'S') goesDown = false;
+  if (key == 'a' || key == 'A') goesLeft = false;
+  if (key == 'd' || key == 'D') goesRight = false;
   keyCode = 0;
   key = 0;
 }
 
 void mousePressed()
 {
+
+
   //reset the draggedPoint
   draggedPoint = -1;
 
@@ -167,7 +177,9 @@ void mouseDragged() {
 
 void mouseReleased()
 {
-   draggedPoint = -1;
+
+
+  draggedPoint = -1;
 }
 
 void mouseWheel(MouseEvent event) {

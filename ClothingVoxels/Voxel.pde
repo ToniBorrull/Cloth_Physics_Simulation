@@ -1,5 +1,8 @@
 char prevKey;
-
+boolean goesUp = false;
+boolean goesDown = false;
+boolean goesLeft = false;
+boolean goesRight = false;
 class voxel extends renderer {
   PVector property_voxel = new PVector(0, 0); //The vector stored in the voxel
   PVector rotateShape = new PVector(0, 0, 0);
@@ -19,22 +22,22 @@ class voxel extends renderer {
 
   void MoveVoxel()
   {
-    if (key == 'w' || key == 'W' || prevKey == 'w' || prevKey == 'W')
+    if (goesUp)
     {
       pos.y -= 5;
     }
 
-    if (key == 's' || key == 'S' || prevKey == 's' || prevKey == 'S')
+    if (goesDown)
     {
       pos.y += 5;
     }
 
-    if (key == 'd' || key == 'D' || prevKey == 'd' || prevKey == 'D')
+    if (goesRight)
     {
       pos.x += 5;
     }
 
-    if (key == 'a' || key == 'A' || prevKey == 'a' || prevKey == 'A')
+    if (goesLeft)
     {
       pos.x -= 5;
     }
