@@ -22,12 +22,12 @@ float angleX = 0, angleY = 0;
 float speed = 20;
 
 void setup() {
-  size(1900, 1080, P3D);
+  size(500, 500, P3D);
   //int posX, int posY, int posZ, float dx, float dy, float dz, float px, float py, float pz, color c
-  v = new voxel(width/2, 550, 0, 200, 100, 200, 0, -100, 0, color(200));
+  v = new voxel(width/2, 550, 0, 200, 100, 200, 0, -100, 50, color(200));
 
-  cols = 10;
-  rows = 10;
+  cols = 25;
+  rows = 25;
   allPoints = cols * rows;
 
   particleXDist = width / cols;
@@ -146,7 +146,8 @@ void mousePressed()
 
   //If the mouse is in-bounds of the screenPoint, mark it as the actual control point to move
   for (int i = 0; i < allPoints; i++) {
-    if (dist(mouseX, mouseY, screenPoints[i].x, screenPoints[i].y) < 20) {
+      
+    if (dist(mouseX, mouseY, screenX(screenPoints[i].x, screenPoints[i].y, screenPoints[i].z), screenY(screenPoints[i].x, screenPoints[i].y, screenPoints[i].z)) < 20) {
       draggedPoint = i;
       break;
     }
@@ -172,7 +173,6 @@ void mouseReleased()
 
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
-  if (e < 0) camZ -= 5;
-  if (e > 0) camZ += 5;
-  println(e);
+  if (e < 0) camZ -= 25;
+  if (e > 0) camZ += 25;
 }
