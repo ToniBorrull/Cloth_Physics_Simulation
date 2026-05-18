@@ -1,6 +1,6 @@
-float gravity = 3;
-float tInc = 0.25;
- 
+float gravity = 0.0;
+float tInc = 0.01;
+
 class Particle extends renderer {
   //Atributes
   float pMass;
@@ -12,30 +12,32 @@ class Particle extends renderer {
   //Constructor
   Particle(PVector _initialPos) {
     col = color (255, 100, 100);
-    size = new PVector((((width + height) / 2) / (rows + cols) / 2) / 10, 10, 10);
-    pMass = 1;
+    size = new PVector(((width + height) / 2) / (rows + cols + depth), 10, 10);
+    if (size.x < 1) size.x = 1;
+    pMass = 0.1;
     pos = _initialPos;
     isStatic = false;
   }
-   Particle(PVector _initialPos, boolean _isStatic) {
+  Particle(PVector _initialPos, boolean _isStatic) {
     col = color (255, 100, 100);
-    size = new PVector(((width + height) / 2 / (rows + cols) / 2) / 10, 10, 10);
+    size = new PVector(((width + height) / 2 / (rows + cols + depth)), 10, 10);
+    if (size.x < 1) size.x = 1;
     pMass = 1;
     pos = _initialPos;
     isStatic = _isStatic;
   }
-  
-  void ResetForces(){ 
+
+  void ResetForces() {
     pForce.x = 0;
     pForce.y = 0;
     pForce.z = 0;
   }
   //Methods
   void ParticleMove() {
-   
+
     float KD = -0.3; //Damping const (negative)
-    
-    if(isStatic) return;
+
+    if (isStatic) return;
 
     //Gravity
     pForce.y += gravity;
@@ -48,7 +50,7 @@ class Particle extends renderer {
     pAcceleration.x = pForce.x/pMass;
     pAcceleration.y = pForce.y/pMass;
     pAcceleration.z = pForce.z/pMass;
-    
+
     //Velocity via acceleration
     pVelocity.x = pVelocity.x + tInc * pAcceleration.x;
     pVelocity.y = pVelocity.y + tInc * pAcceleration.y;
@@ -60,8 +62,8 @@ class Particle extends renderer {
     pos.z = pos.z + tInc * pVelocity.z;
   }
 
-@Override
-  void Draw() {
+  @Override
+    void Draw() {
     push();
     noStroke();
     translate(pos.x - width / 2, pos.y - height / 2, pos.z);

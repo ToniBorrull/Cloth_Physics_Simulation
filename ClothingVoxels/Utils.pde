@@ -6,6 +6,12 @@ boolean isInside(Particle target, voxel voxel) {
           target.pos.z - target.size.z/2 >= voxel.pos.z - voxel.size.z/2 &&
           target.pos.z + target.size.z/2 <= voxel.pos.z + voxel.size.z/2;
 }
+
+boolean isInside(Particle _target, Player _player) {
+  
+  return moduleVector(new PVector(_target.pos.x - _player.position.x, _target.pos.y - _player.position.y, _target.pos.z - _player.position.z)) <= _player.hitboxSize;
+}
+
 PVector normalizeVector(PVector pForce) //3D normalizer
 {
   float magnitude;
