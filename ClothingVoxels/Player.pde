@@ -1,4 +1,4 @@
-float gravityPlayer = 1  ;
+float gravityPlayer = 5;
 
 class Player {
   PVector position;
@@ -22,7 +22,6 @@ class Player {
   }
 
   void MovePlayer() {
-
     float KD = -0.3; //Damping const (negative)
 
     //Gravity

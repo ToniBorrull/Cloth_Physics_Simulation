@@ -25,6 +25,8 @@ float speed = 20;
 //Player
 Player player;
 
+float subcalcs = 99;
+
 void setup() {
   size(900, 900, P3D);
   //int posX, int posY, int posZ, float dx, float dy, float dz, float px, float py, float pz, color c
@@ -89,7 +91,7 @@ void setup() {
   }
 
   //Player
-  player = new Player(new PVector(width/2, -70, -width/2), 1, 70);
+  player = new Player(new PVector(width/2, -70, -width/2), 5, 70);
 }
 
 void draw() {
@@ -119,36 +121,28 @@ void draw() {
 
   //Draw the Voxel
   //v.Draw();
-  float subcalcs = 200;
   for (int s = 0; s < subcalcs; s++)
   {
 
     for (int i = 0; i <cols; i++) {
       for (int j = 0; j < rows; j++) {
         for (int k = 0; k < depth; k++) {
-          /*if (isInside(cloth[i][j][k], v)) {
-           cloth[i][j][k].pForce.x += v.property_voxel.x;
-           cloth[i][j][k].pForce.y += v.property_voxel.y;
-           cloth[i][j][k].pForce.z += v.property_voxel.z;
-           cloth[i][j][k].col = color(0, 0, 255);
-           cloth[i][j][k].ParticleMove();
-           cloth[i][j][k].Draw();
-           } else */
           if (isInside(cloth[i][j][k], player)) {
             PVector movePlayer = new PVector(cloth[i][j][k].pos.x - player.position.x, cloth[i][j][k].pos.y - player.position.y, cloth[i][j][k].pos.z - player.position.z);
-            if (movePlayer.x != 0 && movePlayer.y != 0 && movePlayer.z != 0) movePlayer = normalizeVector(movePlayer);
+            //if (movePlayer.x != 0 && movePlayer.y != 0 && movePlayer.z != 0) movePlayer = normalizeVector(movePlayer);
 
-            cloth[i][j][k].pForce.x += movePlayer.x * player.mass;
-            cloth[i][j][k].pForce.y += movePlayer.y * player.mass;
-            cloth[i][j][k].pForce.z += movePlayer.z * player.mass;
+            cloth[i][j][k].pForce.x += movePlayer.x / 50;
+            cloth[i][j][k].pForce.y += movePlayer.y / 50;
+            cloth[i][j][k].pForce.z += movePlayer.z / 50;
 
-            player.force.x -= movePlayer.x * cloth[i][j][k].pMass;
-            player.force.y -= movePlayer.y * cloth[i][j][k].pMass;
-            player.force.z -= movePlayer.z * cloth[i][j][k].pMass;
+            player.force.x -= movePlayer.x / 50;
+            player.force.y -= movePlayer.y / 50;
+            player.force.z -= movePlayer.z / 50;
+
+            cloth[i][j][k].Draw();
           }
 
           cloth[i][j][k].ParticleMove();
-          cloth[i][j][k].ResetForces();
         }
       }
     }
@@ -156,7 +150,6 @@ void draw() {
     player.ResetForces();
   }
   pop();
-
 
   for (int i = 0; i < cols; i++) {
     for (int j = 0; j < rows; j++) {
@@ -170,11 +163,14 @@ void draw() {
     }
   }
 
-  if (keyCode == SHIFT) player.position.y -= 10;
+  if (keyCode == SHIFT) player.position.y -= gravityPlayer + 50;
+
   if (key == 'i') player.position.z -= 10;
   if (key == 'j') player.position.x -= 10;
   if (key == 'k') player.position.z += 10;
   if (key == 'l') player.position.x += 10;
+
+  player.MovePlayer();
 
   if (key == 'p')
   {
